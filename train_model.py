@@ -24,31 +24,33 @@ train_dataset = tf.keras.utils.image_dataset_from_directory(
   validation_split=0.2,
   subset="training",
   seed=123,
-  image_size=(28, 28),
+  image_size=(128, 128),
   batch_size=BATCH_SIZE)
 #print(train_dataset)
 #train_dataset = tf.data.Dataset.from_tensor_slices(train_images).shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
 def make_generator_model():
     model = tf.keras.Sequential()
-    model.add(layers.Dense(7*7*256, use_bias=False, input_shape=(100,)))
+    model.add(layers.Dense(16*16*256, use_bias=False, input_shape=(100,)))
     model.add(layers.BatchNormalization())
     model.add(layers.LeakyReLU())
 
-    model.add(layers.Reshape((7, 7, 256)))
-    assert model.output_shape == (None, 7, 7, 256)  # Note: None is the batch size
+    model.add(layers.Reshape((16, 16, 256)))
+    assert model.output_shape == (None, 16, 16, 256)  # Note: None is the batch size
 
     model.add(layers.Conv2DTranspose(128, (5, 5), strides=(1, 1), padding='same', use_bias=False))
-    assert model.output_shape == (None, 7, 7, 128)
+    assert model.output_shape == (None, 16, 16, 128)
     model.add(layers.BatchNormalization())
     model.add(layers.LeakyReLU())
 
     model.add(layers.Conv2DTranspose(64, (5, 5), strides=(2, 2), padding='same', use_bias=False))
-    assert model.output_shape == (None, 14, 14, 64)
+    assert model.output_shape == (None, 32, 32, 64)
     model.add(layers.BatchNormalization())
-    model.add(layers.LeakyReLU())
+    model.add(layers.Conv2DTranspose(32, (5, 5), strides=(2, 2), padding='same', use_bias=False))
+    assert model.output_shape == (None, 64, 64, 32)
+    model.add(layers.BatchNormalization())
 
     model.add(layers.Conv2DTranspose(3, (5, 5), strides=(2, 2), padding='same', use_bias=False, activation='tanh'))
-    assert model.output_shape == (None, 28, 28, 3)
+    assert model.output_shape == (None, 128, 128, 3)
 
     return model
 generator = make_generator_model()
@@ -60,7 +62,7 @@ plt.imshow(generated_image[0, :, :, 0], cmap='gray')
 def make_discriminator_model():
     model = tf.keras.Sequential()
     model.add(layers.Conv2D(64, (5, 5), strides=(2, 2), padding='same',
-                                     input_shape=[28, 28, 3]))
+                                     input_shape=[128, 128, 3]))
     model.add(layers.LeakyReLU())
     model.add(layers.Dropout(0.3))
 
