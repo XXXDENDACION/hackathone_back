@@ -17,6 +17,8 @@
     "@alch/alchemy-web3": "^1.1.9",
     "@openzeppelin/contracts": "^4.4.0",
     "axios": "^0.24.0",
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "prettier": "^2.5.1",
+    "write-prettier-file": "^2.1.2"
   }
 }

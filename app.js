@@ -3,7 +3,7 @@ const mintNFT = require("./scripts/mint-nft.js");
 
 const wait = () => {
   return new Promise((res) => {
-    setTimeout(res, 20000);
+    setTimeout(res, 10000);
   });
 };
 const uploadNft = async () => {

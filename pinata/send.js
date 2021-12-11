@@ -1,11 +1,17 @@
 //imports needed for this function
 const axios = require("axios");
+const prettier = require("prettier");
 require("dotenv").config();
 const fs = require("fs");
 const path = "./nft-metadata.json";
 const FormData = require("form-data");
 const { PINATA_API_KEY, PINATA_SECRET_KEY } = process.env;
+//import writePrettierFile from "write-prettier-file";
+//const writePrettierFile = require("write-prettier-file");
+let metadataFormdata = new FormData();
+console.log("1");
 const nftMetadata = fs.readFileSync(path, "utf8");
+//let nftMetadata;
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -14,6 +20,7 @@ function getRandomInt(min, max) {
 module.exports = pinFileToIPFS = (filePath) => {
   return new Promise(async (resolve) => {
     const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
+    console.log("pinfile");
 
     //we gather a local file for this example, but any valid readStream source will work here.
     let data = new FormData();
@@ -48,10 +55,11 @@ module.exports = pinFileToIPFS = (filePath) => {
     data.append("pinataOptions", pinataOptions);
 
     const pinJSONToIPFS = async () => {
-      const url = `https://api.pinata.cloud/pinning/pinJSONToIPFS`;
+      const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
       axios
-        .post(url, nftMetadata, {
+        .post(url, metadataFormdata, {
           headers: {
+            "Content-Type": `multipart/form-data; boundary=${metadataFormdata._boundary}`,
             pinata_api_key: PINATA_API_KEY,
             pinata_secret_api_key: PINATA_SECRET_KEY,
           },
@@ -67,6 +75,8 @@ module.exports = pinFileToIPFS = (filePath) => {
     };
 
     const sendImage = async () => {
+      console.log("sendImage");
+
       axios
         .post(url, data, {
           maxBodyLength: "Infinity", //this is needed to prevent axios from erroring out with large files
@@ -79,17 +89,9 @@ module.exports = pinFileToIPFS = (filePath) => {
         .then(async function (response) {
           fs.writeFileSync(
             path,
-            JSON.stringify(`{
-              "attributes": [
-                { "trait_type": "Breed", "value": "Maltipoo" },
-                { "trait_type": "Eye color", "value": "Mocha" }
-              ],
-              "description": "The world's most adorable and sensitive pup.",
-              "image": "https://gateway.pinata.cloud/ipfs/${response.data.IpfsHash}",
-              "name": "Ramses"
-            }`)
+            `{ "attributes": [ { "trait_type":  "Breed", "value": "Maltipoo" }, { "trait_type": "Eye color", "value": "Mocha" }], "description": "The world's most adorable and sensitive pup.", "image": "https://gateway.pinata.cloud/ipfs/${response.data.IpfsHash}", "name": "Ramses" }`
           );
-
+          metadataFormdata.append("file", fs.createReadStream(path));
           await pinJSONToIPFS();
           console.log(response);
           console.log("sent image and written json");
