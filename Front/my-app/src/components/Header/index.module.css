@@ -1,0 +1,29 @@
+.header {
+    position: 'absolute';
+    top: 0px;
+}
+
+.header__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 0;
+}
+
+.buttons__container {
+    display: flex;
+}
+
+.header__button {
+    border-radius: 8px;
+    height: 61px;
+    width: 96px;
+    background-color: white;
+    margin: 0 10px;
+    box-shadow: none;
+    border: none;
+}
+
+.header__button:hover {
+    background-color:  rgba(0, 0, 0, 0.04);
+}
