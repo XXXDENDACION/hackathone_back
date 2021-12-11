@@ -1,3 +1,4 @@
 ignore/*
 *.png
-torch/content/*
+content/*
+taming-transformers
