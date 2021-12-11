@@ -3,15 +3,30 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: 1px solid black;
-    width: 65%;
     margin: auto;
     border: 1px solid #E5E5E5;
     border-radius: 16px;
+    margin-bottom: 30px;
 }
 
-.icon {
-    margin-top: 5%;
+.news__wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 30px 20px;
+}
+
+.grid__container {
+    justify-content: center;
+}
+
+.image {
+    width: 600px;
+    height: 600px;
+}
+
+.image__container {
+    margin: 15px 30px 0 30px;
 }
 
 .lenta__header {
@@ -24,7 +39,8 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 70%;
+    margin-top: 20px;
+    width: 100%;
 }
 
 .lenta_title__discription {
@@ -34,4 +50,45 @@
 
 .lenta_like__container {
     border: 1px solid #E2E8F0;
+}
+
+.description__title {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 30px;
+    color: black;
+}
+
+.description__text {
+    margin-top: 6px;
+    font-size: 16px;
+    line-height: 21px;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.nft__container {
+    display: flex;
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+    margin-top: 15px;
+}
+
+.nft__title {
+    background: #EDF2F7;
+}
+
+.nft__title > span {
+    font-size: 10px;
+    line-height: 20px;
+    color: rgba(45, 55, 72, 1);
+}
+
+.nft__value, .nft__title  {
+    padding: 6px 12px;
+}
+
+.nft__value > span {
+    font-size: 10px;
+    line-height: 20px;
+    color: rgba(0, 0, 0, 0.36);
 }

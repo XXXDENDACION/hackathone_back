@@ -7,6 +7,20 @@ import LikeIcon from '../../assets/images/Mask.svg';
 
 import styled from './index.module.css'
 
+const feedLenta = [
+    {
+        img: GridIcon,
+        description: "Ананас"
+    },
+    {
+        img: GridIcon,
+        description: "Ананас"
+    },
+    {
+        img: GridIcon,
+        description: "Ананас"
+    }
+]
 
 const Lenta = () => {
 
@@ -14,28 +28,39 @@ const Lenta = () => {
         <div>
             <div className={styled.lenta__header}>
                 <h1>Лента</h1>
-                <DropDown />
             </div>
-            <Grid container columns={1}>
-                <Grid item xs={2} >
-                    <div className={styled.news}>
-                        <div className={styled.icon}>
-                            <img src={GridIcon} width={600} height={600} />
-                        </div>
-                        <div className={styled.lenta__discription}>
-                            <div className={styled.lenta_title__discription}>
-                                <span>Описание</span>
-                                <span>Ананас</span>
+                <Grid className={styled.grid__container} container columns={1}>
+                    <Grid item xl={2}>
+                        {feedLenta.map((item, index) => (
+                            <div key={index} className={styled.news}>
+                                <div key={index} className={styled.news__wrapper}>
+                                    <div className={styled.image__container}>
+                                        <img src={item.img} className={styled.image}/>
+                                    </div>
+                                    <div className={styled.lenta__discription}>
+                                        <div className={styled.lenta_title__discription}>
+                                            <span className={styled.description__title }>Описание</span>
+                                            <span className={styled.description__text}>{item.description}</span>
+                                            <div className={styled.nft__container}>
+                                                <div className={styled.nft__title}>
+                                                    <span>NFT</span>
+                                                </div>
+                                                <div className={styled.nft__value}>
+                                                    <span>0xb9f7d07e14ab2db9b52fd1e1433292c2455fc474</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/*<div className={styled.lenta_like__container}>*/}
+                                        {/*    <span>0</span>*/}
+                                        {/*    <img src={LikeIcon} />*/}
+                                        {/*    <span>Оценить</span>*/}
+                                        {/*</div>*/}
+                                    </div>
+                                </div>
                             </div>
-                            <div className={styled.lenta_like__container}>
-                                <span>0</span>
-                                <img src={LikeIcon} />
-                                <span>Оценить</span>
-                            </div>
-                        </div>
-                    </div>
+                        ))}
+                    </Grid>
                 </Grid>
-            </Grid>
         </div>
     );
 }
