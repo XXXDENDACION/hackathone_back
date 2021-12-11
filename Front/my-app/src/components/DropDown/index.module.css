@@ -1,0 +1,31 @@
+.drop_wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 6px;
+}
+
+.drop_current_sort {
+    display: flex;
+    height: 40px;
+    width: 202px;
+    align-items: center;
+    justify-content: space-between;
+    color: #FFFFFF;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+}
+
+.drop_current_sort_text {
+    color: black;
+}
+
+.drop_bottom_content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 6px;
+}

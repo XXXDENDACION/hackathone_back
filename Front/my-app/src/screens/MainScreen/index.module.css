@@ -1,0 +1,40 @@
+.left__background {
+  position: absolute;
+  height: 600px;
+  width: 600px;
+  background: url('/Users/danko/Desktop/Hakaton/hackathone_back/Front/my-app/src/assets/images/Vector.svg') no-repeat;
+}
+
+.right__background {
+  position: absolute;
+  right: -269px;
+  top: 63px;
+  height: 380px;
+  width: 380px;
+  background: url('/Users/danko/Desktop/Hakaton/hackathone_back/Front/my-app/src/assets/images/RightVectorBack.svg') no-repeat;
+}
+
+.right_bottom__background {
+  position: absolute;
+  height: 481.6126708984375px;
+  width: 481.6129150390625px;
+  right: -320px;
+  top: 321px;
+  background: url('/Users/danko/Desktop/Hakaton/hackathone_back/Front/my-app/src/assets/images/RightBottomBack.svg') no-repeat;
+}
+
+.left_bottom__background {
+  position: absolute;
+  height: 362px;
+  width: 134px;
+  top: 532.7935943603516px;
+  left: 160px;
+  background: url('/Users/danko/Desktop/Hakaton/hackathone_back/Front/my-app/src/assets/images/LeftBottomBack.svg') no-repeat;
+}
+
+.main__container {
+  overflow: hidden;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}

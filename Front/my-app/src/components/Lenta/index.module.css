@@ -1,0 +1,37 @@
+.news {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    width: 65%;
+    margin: auto;
+    border: 1px solid #E5E5E5;
+    border-radius: 16px;
+}
+
+.icon {
+    margin-top: 5%;
+}
+
+.lenta__header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.lenta__discription {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 70%;
+}
+
+.lenta_title__discription {
+    display: flex;
+    flex-direction: column;
+}
+
+.lenta_like__container {
+    border: 1px solid #E2E8F0;
+}

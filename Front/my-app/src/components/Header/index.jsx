@@ -1,21 +1,38 @@
-import React from 'react';
-
-import Button from '../Button';
-
-
+import React, { useState } from 'react';
 
 import styled from './index.module.css';
+import MainLogo from '../../assets/images/Group.svg'
+import AcountPic from '../../assets/images/01.svg';
+import PhoneIcon from '../../assets/images/Phone.svg';
+import DiscoverIcon from '../../assets/images/Discovery.svg'
+
 const Header = () => {
+    const [currentPage, setCurrentPage] = useState('')
+    const heandlerButton = (event) => {
+        setCurrentPage(event.target.id)
+        console.log(event.target.id);
+    }
+    const activeButton = {
+        backgroundColor: '#6667AB',
+    }
+
     return (
         <header className={styled.header}>
             <div className={styled.header__wrapper}>
-                {/* <img src="https://images.unsplash.com/photo-1518756131217-31eb79b20e8f?w=121&h=121&fit=crop&auto=format" width={60} height={40}/> */}
+                <div width={60} height={40}>
+                    <img src={MainLogo} width={60} height={40} />
+                </div>
                 <div className={styled.buttons__container}>
-                    <button value="vany" className={styled.header__button}>
-                        Vany
+                    <button id="first_button" className={styled.header__button} onClick={heandlerButton} style={currentPage === "first_button" ? activeButton : {}}>
+                        <img src={PhoneIcon} width={20} height={20} />
+                    </button>
+                    <button id="second_button" className={styled.header__button} onClick={heandlerButton} style={currentPage === "second_button" ? activeButton : {}}>
+                        <img src={DiscoverIcon} width={20} height={20} />
                     </button>
                 </div>
-                {/* <img src="https://images.unsplash.com/photo-1518756131217-31eb79b20e8f?w=121&h=121&fit=crop&auto=format" width={40} height={40}/> */}
+                <div width={60} height={40}>
+                    <img src={AcountPic} width={60} height={40} />
+                </div>
             </div>
         </header>
     );
