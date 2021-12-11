@@ -14,11 +14,11 @@ np.set_printoptions(precision=3, suppress=True)
 
 from IPython import display
 
-(train_images, train_labels), (_, _) = tf.keras.datasets.mnist.load_data()
-train_images = train_images.reshape(train_images.shape[0], 28, 28, 1).astype('float32')
-train_images = (train_images - 127.5) / 127.5  # Normalize the images to [-1, 1]
-BUFFER_SIZE = 60000
-BATCH_SIZE = 256
+#(train_images, train_labels), (_, _) = tf.keras.datasets.mnist.load_data()
+#train_images = train_images.reshape(train_images.shape[0], 128, 128, 1).astype('float32')
+#train_images = (train_images - 127.5) / 127.5  # Normalize the images to [-1, 1]
+BUFFER_SIZE = 6000
+BATCH_SIZE = 4
 train_dataset = tf.keras.utils.image_dataset_from_directory(
   '/home/ivan/Downloads/cartoonset100k/',
   validation_split=0.2,
@@ -150,14 +150,12 @@ def generate_and_save_images(model, epoch, test_input):
   # This is so all layers run in inference mode (batchnorm).
   predictions = model(test_input, training=False)
 
-  fig = plt.figure(figsize=(4, 4))
-
   for i in range(predictions.shape[0]):
       plt.subplot(4, 4, i+1)
-      plt.imshow(predictions[i, :, :, 0] * 127.5 + 127.5, cmap='gray')
+      plt.imshow((np.array(predictions[i]) * 255).astype(np.uint8))
       plt.axis('off')
-
   plt.savefig('image_at_epoch_{:04d}.png'.format(epoch))
+  plt.close()
 #  plt.show()
 train(train_dataset, EPOCHS)
 checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir))
