@@ -27,15 +27,13 @@ const Lenta = () => {
 
     const getImage = () => {
         const url = `http://localhost:3000/getImages`;
-        axios.get(url, { responseType: 'arraybuffer' }).then(res => {
-            const {data} = res;
-            const base64 = btoa(
-              new Uint8Array(data).reduce(
-                (data, byte) => data + String.fromCharCode(byte),
-                '',
-              ),
-            );
-            setFeedLenta((prev) => ([{img: "data:;base64," + base64, description: 'HI'}, ...prev]))
+        axios.get(url, {
+            headers: {
+                responseType: 'arraybuffer'
+            }
+        }).then(res => {
+            const { data } = res;
+            setFeedLenta((prev) => ([{img: "data:image/png;base64, " + data.img, description: data.description}, ...prev]))
         }).catch(err => console.log(err))
     }
 
