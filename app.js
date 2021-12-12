@@ -29,7 +29,7 @@ app.post('/link', async(req, res) => {
     url,
     description
   }
-  fs.writeFile('file.json', JSON.stringify(obj), (err, data) => {
+  fs.writeFile(`file${i}.json`, JSON.stringify(obj), (err, data) => {
     if (err) throw err;
     console.log('OK');
     res.send('OK');
@@ -38,32 +38,40 @@ app.post('/link', async(req, res) => {
 
 app.get('/', async(req, res) => {
   let link = '';
-  const downloadImage = (url, filename, callback) => {
-    request.head(url, (err, res, body) => {
+  const downloadImage = async (url, filename, callback) => {
+    return await request.head(url, (err, res, body) => {
       request(url).pipe(fs.createWriteStream(filename)).on('close', callback);
     })
   }
-  fs.readFile('file.json', (err, data) => {
+  fs.readFile(`file${i}.json`, (err, data) => {
     if(err) throw err;
     link = JSON.parse(data).url;
     link = link + '.png';
     console.log(link);
-    downloadImage(link, `image${i}.png`, () => console.log('HI'));
-    res.send('LINK');
+    downloadImage(link, `image${i}.png`, () => console.log('HI')).then(res => {
+      imageToBase64(`image${i}.png`).then(
+          (response) => {
+            const base64 = response.split(';base64,').pop();
+            fs.writeFile('currentNFTimage.png', base64, {encoding: 'base64'}, (err, data) => {
+              if (err) throw err;
+              uploadNft('currentNFTimage.png');
+            })
+          }
+      )
+    });
   });
 })
 
 app.get('/getImages', async(req, res) => {
   let description = '';
   let img = '';
-  imageToBase64('image.png').then(
+  imageToBase64(`image${i}.png`).then(
     (response) => {
       console.log(response);
       img = response;
-      fs.readFile('image.png', (err, data) => {
+      fs.readFile(`image${i}.png`, (err, data) => {
         if (err) throw err;
-        console.log(data);
-        fs.readFile('file.json', (err, data) => {
+        fs.readFile(`file${i}.json`, (err, data) => {
           if(err) throw err;
           description = JSON.parse(data).description;
           console.log(description);
