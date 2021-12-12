@@ -18,6 +18,9 @@ app.post('/link', async(req, res) => {
   const { description, url } = req.body;
   console.log('URL', url);
   console.log('DESCRIPTION', description);
+  if(!url && !description) {
+    throw 'UNDEFINED';
+  }
   const obj = {
     url,
     description
