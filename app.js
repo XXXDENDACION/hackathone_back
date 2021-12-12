@@ -14,6 +14,20 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.post('/link', async(req, res) => {
+  console.log('DATA', req.body);
+  const { description, url } = req.body;
+  const obj = {
+    url,
+    description
+  }
+  fs.writeFile('file.json', JSON.stringify(obj), (err, data) => {
+    if (err) throw err;
+    console.log('OK');
+    res.send('OK');
+  })
+});
+
+app.get('/', async(req, res) => {
   let link = '';
   const downloadImage = (url, filename, callback) => {
     request.head(url, (err, res, body) => {
@@ -23,26 +37,14 @@ app.post('/link', async(req, res) => {
       request(url).pipe(fs.createWriteStream(filename)).on('close', callback);
     })
   }
-
-  const { description, url } = req.body;
-  const obj = {
-    url,
-    description
-  }
-  fs.writeFile('file.json', JSON.stringify(obj), (err, data) => {
-    if (err) throw err;
-    fs.readFile('file.json', (err, data) => {
-      if(err) throw err;
-      link = JSON.parse(data).url;
-      link = link + '.png';
-      console.log(link);
-      downloadImage(link, 'image.png', () => console.log('HI'));
-      res.send('LINK');
-    });
-  })
-});
-
-app.get('/', async(req, res) => {
+  fs.readFile('file.json', (err, data) => {
+    if(err) throw err;
+    link = JSON.parse(data).url;
+    link = link + '.png';
+    console.log(link);
+    downloadImage(link, 'image.png', () => console.log('HI'));
+    res.send('LINK');
+  });
 })
 
 app.get('/getImages', async(req, res) => {
