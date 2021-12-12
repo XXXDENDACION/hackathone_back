@@ -6,6 +6,8 @@ const fs = require("fs");
 const path = "./nft-metadata.json";
 const FormData = require("form-data");
 const { PINATA_API_KEY, PINATA_SECRET_KEY } = process.env;
+const pinataSDK = require("@pinata/sdk");
+const pinata = pinataSDK(PINATA_API_KEY, PINATA_SECRET_KEY);
 //import writePrettierFile from "write-prettier-file";
 //const writePrettierFile = require("write-prettier-file");
 let metadataFormdata = new FormData();
@@ -55,22 +57,16 @@ module.exports = pinFileToIPFS = (filePath) => {
     data.append("pinataOptions", pinataOptions);
 
     const pinJSONToIPFS = async () => {
-      const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
-      axios
-        .post(url, metadataFormdata, {
-          headers: {
-            "Content-Type": `multipart/form-data; boundary=${metadataFormdata._boundary}`,
-            pinata_api_key: PINATA_API_KEY,
-            pinata_secret_api_key: PINATA_SECRET_KEY,
-          },
+      pinata
+        .pinFromFS(path)
+        .then((result) => {
+          //handle results here
+          console.log(result);
+          resolve(result.IpfsHash);
         })
-        .then(function (response) {
-          console.log("pinned metadata");
-          console.log(response);
-          resolve(response.data.IpfsHash);
-        })
-        .catch(function (error) {
-          console.log("error:", error);
+        .catch((err) => {
+          //handle error here
+          console.log(err);
         });
     };
 
@@ -86,13 +82,19 @@ module.exports = pinFileToIPFS = (filePath) => {
             pinata_secret_api_key: PINATA_SECRET_KEY,
           },
         })
-        .then(async function (response) {
+        .then(function (response) {
+          console.log(response, '@@#@');
           fs.writeFileSync(
             path,
-            `{ "attributes": [ { "trait_type":  "Breed", "value": "Maltipoo" }, { "trait_type": "Eye color", "value": "Mocha" }], "description": "The world's most adorable and sensitive pup.", "image": "https://gateway.pinata.cloud/ipfs/${response.data.IpfsHash}", "name": "Ramses" }`
+            `{ "attributes": [ { "trait_type":  "Breed", "value": "Maltipoo" }, { "trait_type": "Eye color", "value": "Mocha" }], "description": "The world's most adorable and sensitive pup.", "image": "https://gateway.pinata.cloud/ipfs/${response.data.IpfsHash}", "name": "Ramses" }`,
           );
-          metadataFormdata.append("file", fs.createReadStream(path));
-          await pinJSONToIPFS();
+          console.log('!@@@2131!', path);
+          const readStream = fs.createReadStream(path);
+          console.log('@@@@', readStream);
+          metadataFormdata.append("file", readStream);
+          pinJSONToIPFS()
+              .then(res => console.log('METADATA', res))
+              .catch(err => console.log("ERR METDATA", err));
           console.log(response);
           console.log("sent image and written json");
         })
@@ -100,7 +102,8 @@ module.exports = pinFileToIPFS = (filePath) => {
           console.log("error:", error);
         });
     };
-    await sendImage();
+    sendImage()
+        .then(res => console.log('!!!', res))
+        .catch(err => console.log(err));
   });
 };
-//module.exports = pinFileToIPFS = async (filePath) => {};

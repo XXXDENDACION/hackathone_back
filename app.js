@@ -10,8 +10,8 @@ const imageToBase64 = require('image-to-base64');
 
 const app = express();
 
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(cors());
-app.use(bodyParser.json());
 
 app.post('/link', async(req, res) => {
   console.log('DATA', req.body);
@@ -74,9 +74,25 @@ app.get('/getImages', async(req, res) => {
   )
 })
 
-const uploadNft = async () => {
+app.post('/nft', async(req, res) => {
+  console.log('DATA', req.body);
+  const { img } = req.body;
+  console.log('URL', img);
+  if(!img) {
+    throw 'No image';
+  }
+  const base64 = img.split(';base64,').pop();;
+  console.log(base64);
+  fs.writeFile('currentNFTimage.png', base64, {encoding: 'base64'}, async (err, data) => {
+    if (err) throw err;
+    await uploadNft('currentNFTimage.png');
+    res.send('OK');
+  })
+});
+
+const uploadNft = async (img) => {
   try {
-    pinFileToIPFS("./assets/dali.png").then(async (res) => {
+    pinFileToIPFS(img).then(async (res) => {
       console.log(res);
       console.log("waiting for 5 sec");
       mintNFT(res);
@@ -86,6 +102,5 @@ const uploadNft = async () => {
     console.log(err);
   }
 };
-// uploadNft();
 
 app.listen(process.env.PORT || 3000, () => console.log('START'));
