@@ -16,6 +16,8 @@ app.use(bodyParser.json());
 app.post('/link', async(req, res) => {
   console.log('DATA', req.body);
   const { description, url } = req.body;
+  console.log('URL', url);
+  console.log('DESCRIPTION', description);
   const obj = {
     url,
     description
@@ -31,8 +33,6 @@ app.get('/', async(req, res) => {
   let link = '';
   const downloadImage = (url, filename, callback) => {
     request.head(url, (err, res, body) => {
-      console.log('ERR', err);
-      console.log('RES', res);
       request(url).pipe(fs.createWriteStream(filename)).on('close', callback);
     })
   }
