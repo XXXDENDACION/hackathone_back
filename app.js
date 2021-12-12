@@ -31,9 +31,8 @@ app.get('/', async(req, res) => {
   let link = '';
   const downloadImage = (url, filename, callback) => {
     request.head(url, (err, res, body) => {
-      console.log('content-type:', res?.headers['content-type']);
-      console.log('content-length:', res?.headers['content-length']);
-
+      console.log('ERR', err);
+      console.log('RES', res);
       request(url).pipe(fs.createWriteStream(filename)).on('close', callback);
     })
   }
