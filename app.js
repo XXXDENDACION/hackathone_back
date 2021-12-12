@@ -39,8 +39,8 @@ app.get('/', async(req, res) => {
   fs.readFile('file.json', (err, data) => {
     if(err) throw err;
     link = data.url;
+    downloadImage(link, 'image.png', () => console.log('HI'));
   })
-  downloadImage(link, 'image.png', () => console.log('HI'));
   res.send('LINK');
 })
 
