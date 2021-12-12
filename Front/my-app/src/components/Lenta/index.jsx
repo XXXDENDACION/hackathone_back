@@ -26,7 +26,7 @@ const Lenta = () => {
     }, [])
 
     const getImage = () => {
-        const url = `http://localhost:3000/getImages`;
+        const url = `https://backend-hahathone.herokuapp.com/getImages`;
         axios.get(url, {
             headers: {
                 responseType: 'arraybuffer'
