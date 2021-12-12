@@ -13,12 +13,8 @@ const app = express();
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(cors());
 
-
-let i = 0;
-
 app.post('/link', async(req, res) => {
   console.log('DATA', req.body);
-  i++;
   const { description, url } = req.body;
   console.log('URL', url);
   console.log('DESCRIPTION', description);
@@ -29,7 +25,7 @@ app.post('/link', async(req, res) => {
     url,
     description
   }
-  fs.writeFile(`file${i}.json`, JSON.stringify(obj), (err, data) => {
+  fs.writeFile(`file.json`, JSON.stringify(obj), (err, data) => {
     if (err) throw err;
     console.log('OK');
     res.send('OK');
@@ -43,13 +39,13 @@ app.get('/', async(req, res) => {
       request(url).pipe(fs.createWriteStream(filename)).on('close', callback);
     })
   }
-  fs.readFile(`file${i}.json`, (err, data) => {
+  fs.readFile(`file.json`, (err, data) => {
     if(err) throw err;
     link = JSON.parse(data).url;
     link = link + '.png';
     console.log(link);
-    downloadImage(link, `image${i}.png`, () => console.log('HI')).then(res => {
-      imageToBase64(`image${i}.png`).then(
+    downloadImage(link, `image.png`, () => console.log('HI')).then(res => {
+      imageToBase64(`image.png`).then(
           (response) => {
             const base64 = response.split(';base64,').pop();
             fs.writeFile('currentNFTimage.png', base64, {encoding: 'base64'}, (err, data) => {
@@ -66,13 +62,13 @@ app.get('/getImages', async(req, res) => {
   let description = '';
   let img = '';
   for(let count = 0; count <= 10; count++) {
-    imageToBase64(`image${count}.png`).then(
+    imageToBase64(`image.png`).then(
         (response) => {
           console.log(response);
           img = response;
-          fs.readFile(`image${count}.png`, (err, data) => {
+          fs.readFile(`image.png`, (err, data) => {
             if (err) throw err;
-            fs.readFile(`file${count}.json`, (err, data) => {
+            fs.readFile(`file.json`, (err, data) => {
               if(err) throw err;
               description = JSON.parse(data).description;
               console.log(description);
