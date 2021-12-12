@@ -6,6 +6,7 @@ const request = require('request');
 const bodyParser = require('body-parser');
 const pinFileToIPFS = require("./pinata/send.js");
 const mintNFT = require("./scripts/mint-nft.js");
+const imageToBase64 = require('image-to-base64');
 
 const app = express();
 
@@ -39,32 +40,36 @@ app.get('/', async(req, res) => {
   fs.readFile('file.json', (err, data) => {
     if(err) throw err;
     link = JSON.parse(data).url;
-    link = link + 'png';
+    link = link + '.png';
+    console.log(link);
     downloadImage(link, 'image.png', () => console.log('HI'));
+    res.send('LINK');
   });
-  res.send('LINK');
 })
 
 app.get('/getImages', async(req, res) => {
   let description = '';
   let img = '';
-  fs.readFile('image.png', (err, data) => {
-    if (err) throw err;
-    img = Buffer.from(data, 'base64');
-    // res.writeHead(200, {
-    //   'Content-Type': 'image/png',
-    //   'Content-Length': img.length
-    // });
-    fs.readFile('file.json', (err, data) => {
-      if(err) throw err;
-      description = data;
-      const obj = {
-        img,
-        description
-      }
-      res.end(img);
-    })
-  })
+  imageToBase64('image.png').then(
+    (response) => {
+      console.log(response);
+      img = response;
+      fs.readFile('image.png', (err, data) => {
+        if (err) throw err;
+        console.log(data);
+        fs.readFile('file.json', (err, data) => {
+          if(err) throw err;
+          description = JSON.parse(data).description;
+          console.log(description);
+          const obj = {
+            img,
+            description
+          }
+          res.json(obj);
+        })
+      })
+    }
+  )
 })
 
 const uploadNft = async () => {
