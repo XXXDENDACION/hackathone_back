@@ -65,25 +65,30 @@ app.get('/', async(req, res) => {
 app.get('/getImages', async(req, res) => {
   let description = '';
   let img = '';
-  imageToBase64(`image${i}.png`).then(
-    (response) => {
-      console.log(response);
-      img = response;
-      fs.readFile(`image${i}.png`, (err, data) => {
-        if (err) throw err;
-        fs.readFile(`file${i}.json`, (err, data) => {
-          if(err) throw err;
-          description = JSON.parse(data).description;
-          console.log(description);
-          const obj = {
-            img,
-            description
-          }
-          res.json(obj);
-        })
-      })
-    }
-  )
+  for(let count = 0; count <= 10; count++) {
+    imageToBase64(`image${count}.png`).then(
+        (response) => {
+          console.log(response);
+          img = response;
+          fs.readFile(`image${count}.png`, (err, data) => {
+            if (err) throw err;
+            fs.readFile(`file${count}.json`, (err, data) => {
+              if(err) throw err;
+              description = JSON.parse(data).description;
+              console.log(description);
+              const obj = {
+                img,
+                description
+              }
+              res.json(obj);
+            })
+          })
+        },
+        (error) => {
+          if (error) throw 'NO SUCH FILE IMAGE OR META'
+        }
+    )
+  }
 })
 
 app.post('/nft', async(req, res) => {
