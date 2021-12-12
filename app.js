@@ -8,7 +8,7 @@ const wait = () => {
 };
 const uploadNft = async () => {
   try {
-    pinFileToIPFS("./assets/dali.png").then(async (res) => {
+    pinFileToIPFS("./assets/giphy.gif").then(async (res) => {
       console.log(res);
       console.log("waiting for 5 sec");
       await wait();

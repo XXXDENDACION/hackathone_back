@@ -6,6 +6,8 @@ const fs = require("fs");
 const path = "./nft-metadata.json";
 const FormData = require("form-data");
 const { PINATA_API_KEY, PINATA_SECRET_KEY } = process.env;
+const pinataSDK = require("@pinata/sdk");
+const pinata = pinataSDK(PINATA_API_KEY, PINATA_SECRET_KEY);
 //import writePrettierFile from "write-prettier-file";
 //const writePrettierFile = require("write-prettier-file");
 let metadataFormdata = new FormData();
@@ -55,22 +57,16 @@ module.exports = pinFileToIPFS = (filePath) => {
     data.append("pinataOptions", pinataOptions);
 
     const pinJSONToIPFS = async () => {
-      const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
-      axios
-        .post(url, metadataFormdata, {
-          headers: {
-            "Content-Type": `multipart/form-data; boundary=${metadataFormdata._boundary}`,
-            pinata_api_key: PINATA_API_KEY,
-            pinata_secret_api_key: PINATA_SECRET_KEY,
-          },
+      pinata
+        .pinFromFS(path)
+        .then((result) => {
+          //handle results here
+          console.log(result);
+          resolve(result.IpfsHash);
         })
-        .then(function (response) {
-          console.log("pinned metadata");
-          console.log(response);
-          resolve(response.data.IpfsHash);
-        })
-        .catch(function (error) {
-          console.log("error:", error);
+        .catch((err) => {
+          //handle error here
+          console.log(err);
         });
     };
 
@@ -103,4 +99,3 @@ module.exports = pinFileToIPFS = (filePath) => {
     await sendImage();
   });
 };
-//module.exports = pinFileToIPFS = async (filePath) => {};
