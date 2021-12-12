@@ -1,28 +1,43 @@
-import React, { useState } from 'react';
-
-import DropDown from '../DropDown';
+import React, { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 import GridIcon from '../../assets/images/PNhCI5vz9pI 1.svg';
-import LikeIcon from '../../assets/images/Mask.svg';
 
 import styled from './index.module.css'
-
-const feedLenta = [
-    {
-        img: GridIcon,
-        description: "Ананас"
-    },
-    {
-        img: GridIcon,
-        description: "Ананас"
-    },
-    {
-        img: GridIcon,
-        description: "Ананас"
-    }
-]
+import axios from "axios";
 
 const Lenta = () => {
+    const [feedLenta, setFeedLenta] = useState([
+        {
+            img: GridIcon,
+            description: "Ананас"
+        },
+        {
+            img: GridIcon,
+            description: "Ананас"
+        },
+        {
+            img: GridIcon,
+            description: "Ананас"
+        }
+    ]);
+
+    useEffect(() => {
+        getImage();
+    }, [])
+
+    const getImage = () => {
+        const url = `http://localhost:3000/getImages`;
+        axios.get(url, { responseType: 'arraybuffer' }).then(res => {
+            const {data} = res;
+            const base64 = btoa(
+              new Uint8Array(data).reduce(
+                (data, byte) => data + String.fromCharCode(byte),
+                '',
+              ),
+            );
+            setFeedLenta((prev) => ([{img: "data:;base64," + base64, description: 'HI'}, ...prev]))
+        }).catch(err => console.log(err))
+    }
 
     return (
         <div>
