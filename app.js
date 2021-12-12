@@ -61,7 +61,6 @@ app.get('/', async(req, res) => {
 app.get('/getImages', async(req, res) => {
   let description = '';
   let img = '';
-  for(let count = 0; count <= 10; count++) {
     imageToBase64(`image.png`).then(
         (response) => {
           console.log(response);
@@ -84,7 +83,6 @@ app.get('/getImages', async(req, res) => {
           if (error) throw 'NO SUCH FILE IMAGE OR META'
         }
     )
-  }
 })
 
 app.post('/nft', async(req, res) => {
