@@ -116,7 +116,7 @@ class ClampWithGrad(torch.autograd.Function):
  
     @staticmethod
     def backward(ctx, grad_in):
-        input, = ctx.saved_tensorsarg
+        input, = ctx.saved_tensors
         return grad_in * (grad_in * (input - input.clamp(ctx.min, ctx.max)) >= 0), None, None
  
  
@@ -210,8 +210,8 @@ def resize_image(image, out_size):
 
 prompts = str(sys.argv[2])
 print(prompts)
-width =  512
-height =  512
+width =  400
+height =  400
 model = "sflckr"
 display_frequency =  50
 initial_image = "None"
@@ -399,3 +399,11 @@ try:
 except KeyboardInterrupt:
     pass
 
+init_frame = 1
+last_frame = i
+frames = []
+for i in range(init_frame,last_frame):
+    filename = f"steps/{i:04}.png"
+    if(i%15 == 0):
+        frames.append(Image.open(filename))
+imageio.mimsave('movie.gif', frames)
