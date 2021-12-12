@@ -91,7 +91,7 @@ module.exports = pinFileToIPFS = (filePath) => {
           console.log('!@@@2131!', path);
           const readStream = fs.createReadStream(path);
           console.log('@@@@', readStream);
-          metadataFormdata.append("file", readStream);
+          metadataFormdata.append("file", path);
           pinJSONToIPFS()
               .then(res => console.log('METADATA', res))
               .catch(err => console.log("ERR METDATA", err));

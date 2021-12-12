@@ -13,8 +13,12 @@ const app = express();
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(cors());
 
+
+let i = 0;
+
 app.post('/link', async(req, res) => {
   console.log('DATA', req.body);
+  i++;
   const { description, url } = req.body;
   console.log('URL', url);
   console.log('DESCRIPTION', description);
@@ -44,7 +48,7 @@ app.get('/', async(req, res) => {
     link = JSON.parse(data).url;
     link = link + '.png';
     console.log(link);
-    downloadImage(link, 'image.png', () => console.log('HI'));
+    downloadImage(link, `image${i}.png`, () => console.log('HI'));
     res.send('LINK');
   });
 })
@@ -83,10 +87,9 @@ app.post('/nft', async(req, res) => {
   }
   const base64 = img.split(';base64,').pop();;
   console.log(base64);
-  fs.writeFile('currentNFTimage.png', base64, {encoding: 'base64'}, async (err, data) => {
+  fs.writeFile('currentNFTimage.png', base64, {encoding: 'base64'}, (err, data) => {
     if (err) throw err;
-    await uploadNft('currentNFTimage.png');
-    res.send('OK');
+    uploadNft('currentNFTimage.png');
   })
 });
 
@@ -102,5 +105,7 @@ const uploadNft = async (img) => {
     console.log(err);
   }
 };
+
+// uploadNft('./assets/dali.png');
 
 app.listen(process.env.PORT || 3000, () => console.log('START'));
